@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Star-Rey - Cadastro</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <main class="auth-container">
+    <h1>Cadastro - Star-Rey</h1>
+    <form id="registerForm" enctype="multipart/form-data">
+      <label for="username">Nome de Usuário:</label>
+      <input type="text" id="username" name="username" required />
+
+      <label for="email">E-mail:</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="password">Senha:</label>
+      <input type="password" id="password" name="password" required />
+
+      <label for="confirmPassword">Confirmar Senha:</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" required />
+
+      <label for="avatar">Avatar (opcional):</label>
+      <input type="file" id="avatar" name="avatar" accept="image/*" />
+
+      <button type="submit">Cadastrar</button>
+    </form>
+    <p>Já tem uma conta? <a href="login.html">Faça login aqui</a></p>
+  </main>
+
+  <script>
+    document.getElementById("registerForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const username = e.target.username.value.trim();
+      const email = e.target.email.value.trim();
+      const password = e.target.password.value;
+      const confirmPassword = e.target.confirmPassword.value;
+      const avatarInput = e.target.avatar;
+
+      if (password !== confirmPassword) {
+        alert("As senhas não coincidem!");
+        return;
+      }
+
+      // Aqui você pode adicionar o código para salvar os dados (localStorage, Firebase etc.)
+      // Exemplo simples com localStorage (não seguro para produção):
+      const userData = {
+        username,
+        email,
+        password,
+        avatar: null,
+      };
+
+      if (avatarInput.files.length > 0) {
+        const reader = new FileReader();
+        reader.onload = function () {
+          userData.avatar = reader.result;
+          salvarUsuario(userData);
+        };
+        reader.readAsDataURL(avatarInput.files[0]);
+      } else {
+        salvarUsuario(userData);
+      }
+
+      function salvarUsuario(data) {
+        // Para este exemplo, salvamos no localStorage com a chave email
+        localStorage.setItem("user_" + email, JSON.stringify(data));
+        alert("Cadastro realizado com sucesso!");
+        window.location.href = "login.html";
+      }
+    });
+  </script>
+</body>
+</html>
