@@ -6,22 +6,23 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  const postBtn = document.getElementById("postBtn");
-  const postText = document.getElementById("postText");
-  const postImage = document.getElementById("postImage");
   const modal = document.getElementById("modalPost");
-  const closeModal = document.getElementById("closeModal");
-  const openModalBtn = document.getElementById("openModal");
+  const openModalBtn = document.querySelector("button[onclick='abrirModalPost()']"); // Seu botão estrela
   const feedContainer = document.getElementById("feedContainer");
+  const postText = document.getElementById("novaPostagem");
+  const postImage = document.getElementById("imagemPost");
 
   // Abrir e fechar modal
-  openModalBtn.addEventListener("click", () => modal.classList.remove("hidden"));
-  closeModal.addEventListener("click", () => modal.classList.add("hidden"));
+  openModalBtn.addEventListener("click", abrirModalPost);
 
-  // Função de postar
-  postBtn.addEventListener("click", () => {
+  function abrirModalPost() {
+    modal.classList.toggle("hidden");
+  }
+
+  // Função de criar post
+  document.querySelector("#modalPost button").addEventListener("click", () => {
     const texto = postText.value.trim();
-    if (texto === "") {
+    if (!texto) {
       alert("Escreva algo antes de postar.");
       return;
     }
@@ -37,24 +38,22 @@ document.addEventListener("DOMContentLoaded", () => {
       comentarios: [],
     };
 
-    // Se tiver imagem
     const arquivo = postImage.files[0];
     if (arquivo) {
       const reader = new FileReader();
-      reader.onload = function (event) {
-        post.midias = event.target.result;
+      reader.onload = function(e) {
+        post.midias = e.target.result;
         salvarPost(post);
       };
-      reader.readAsDataURL(arquivo);
+      reader.readAsDataURL(arquivo);  // Safe
     } else {
       salvarPost(post);
     }
   });
 
-  // Salvar post no localStorage
   function salvarPost(post) {
     let posts = JSON.parse(localStorage.getItem("posts")) || [];
-    posts.unshift(post); // adiciona no topo
+    posts.unshift(post);
     localStorage.setItem("posts", JSON.stringify(posts));
     renderizarPosts();
     modal.classList.add("hidden");
@@ -62,7 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
     postImage.value = "";
   }
 
-  // Renderizar posts no feed
   function renderizarPosts() {
     const posts = JSON.parse(localStorage.getItem("posts")) || [];
     feedContainer.innerHTML = "";
@@ -82,26 +80,37 @@ document.addEventListener("DOMContentLoaded", () => {
         <p>${post.texto}</p>
         ${post.midias ? `<img src="${post.midias}" class="midia-post">` : ""}
         <div class="post-actions">
-          <button onclick="curtirPost(${index})">❤️ Curtir (${post.curtidas})</button>
-          <button onclick="comentarPost(${index})">💬 Comentar</button>
-          <button onclick="republicarPost(${index})">🔁 Republicar</button>
+          <button data-action="curtir" data-index="${index}">❤️ Curtir (${post.curtidas})</button>
+          <button data-action="comentar" data-index="${index}">💬 Comentar</button>
+          <button data-action="republicar" data-index="${index}">🔁 Republicar</button>
         </div>
       `;
       feedContainer.appendChild(postEl);
     });
   }
 
+  // Delegação de eventos
+  feedContainer.addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-action]");
+    if (!btn) return;
+
+    const action = btn.dataset.action;
+    const index = parseInt(btn.dataset.index);
+    if (action === "curtir") curtirPost(index);
+    else if (action === "comentar") comentarPost(index);
+    else if (action === "republicar") republicarPost(index);
+  });
+
   renderizarPosts();
 
-  // Funções globais de interação
-  window.curtirPost = function (index) {
+  function curtirPost(index) {
     const posts = JSON.parse(localStorage.getItem("posts")) || [];
     posts[index].curtidas++;
     localStorage.setItem("posts", JSON.stringify(posts));
     renderizarPosts();
-  };
+  }
 
-  window.comentarPost = function (index) {
+  function comentarPost(index) {
     const comentario = prompt("Escreva seu comentário:");
     if (comentario) {
       const posts = JSON.parse(localStorage.getItem("posts")) || [];
@@ -109,9 +118,9 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem("posts", JSON.stringify(posts));
       alert("Comentário adicionado!");
     }
-  };
+  }
 
-  window.republicarPost = function (index) {
+  function republicarPost(index) {
     const posts = JSON.parse(localStorage.getItem("posts")) || [];
     const original = posts[index];
     const repost = {
@@ -124,5 +133,5 @@ document.addEventListener("DOMContentLoaded", () => {
     posts.unshift(repost);
     localStorage.setItem("posts", JSON.stringify(posts));
     renderizarPosts();
-  };
+  }
 });
