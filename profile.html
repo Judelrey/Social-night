@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meu Perfil - Star-Rey</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script defer src="js/perfil.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="top-left">
+      <a href="index.html">← Voltar</a>
+    </div>
+    <div class="top-center logo-animada">
+      👁️👄👁️💅🏻
+    </div>
+  </header>
+
+  <main class="perfil-container">
+    <!-- INFORMAÇÕES DO USUÁRIO -->
+    <section class="perfil-info">
+      <img id="avatarPerfil" src="img/avatar-default.png" alt="Avatar" class="avatar-grande" />
+      <h2 id="nomeUsuario">Nome do Usuário</h2>
+      <p id="emailUsuario">email@exemplo.com</p>
+      <a href="editar-perfil.html" class="btn-editar">✏️ Editar Perfil</a>
+    </section>
+
+    <!-- POSTS DO USUÁRIO -->
+    <section class="meus-posts">
+      <h3>📝 Meus Posts</h3>
+      <div id="meusPostsContainer">
+        <!-- Posts serão renderizados aqui -->
+      </div>
+    </section>
+  </main>
+</body>
+</html>

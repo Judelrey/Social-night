@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Editar Perfil - Star-Rey</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script defer src="js/editar-perfil.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="top-left">
+      <a href="profile.html">← Voltar</a>
+    </div>
+    <div class="top-center logo-animada">
+      👁️👄👁️💅🏻
+    </div>
+  </header>
+
+  <main class="editar-perfil-container">
+    <h2>🎀 Editar Perfil</h2>
+
+    <form id="formEditarPerfil">
+      <label for="novoNome">Nome de Usuário:</label>
+      <input type="text" id="novoNome" placeholder="Digite seu novo nome" required />
+
+      <label for="novaFoto">Foto de Perfil:</label>
+      <input type="file" id="novaFoto" accept="image/*" />
+
+      <button type="submit">Salvar Alterações</button>
+    </form>
+  </main>
+</body>
+</html>
