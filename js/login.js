@@ -1,9 +1,8 @@
-// Importações do Firebase
 import { auth } from './firebase-config.js';
 import { signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js';
 
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("loginForm");
+  const loginForm = document.getElementById("loginForm");
 
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -13,27 +12,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-       .then((userCredential) => {
-        const user = userCredential.user;
-        const usuarioLogado = {
-          uid: user.uid,
-          email: user.email,
-          nome: user.displayName || "Usuário",
-          avatar: user.photoURL || "img/avatar-default.png"
-        };
-        localStorage.setItem("usuarioLogado", JSON.stringify(usuarioLogado));
-        window.location.href = "index.html";
-       })
-       .catch((error) => {
-        console.error("Erro ao fazer login:", error);
-        akert("E-mail ou senha incorretos. Verifique e tente novamente.");
-      });
       const user = userCredential.user;
 
-      // Salva o UID no localStorage para controle de sessão
-      localStorage.setItem("usuarioUID", user.uid);
+      const usuarioLogado = {
+        nome: user.displayName || "Usuário Retrô",
+        email: user.email,
+        avatar: user.photoURL || "img/avatar-default.png"
+      };
 
-      alert("Login bem-sucedido! Bem-vindo de volta ✨");
+      // Salva os dados no localStorage
+      localStorage.setItem("usuarioLogado", JSON.stringify(usuarioLogado));
+      localStorage.setItem("usuarioUID", user.uid); // UID para identificar o usuário logado
+
+      alert("✨ Login bem-sucedido! Bem-vindo de volta ✨");
       window.location.href = "index.html";
     } catch (error) {
       console.error("Erro ao fazer login:", error);
