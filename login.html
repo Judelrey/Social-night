@@ -6,24 +6,25 @@
   <title>Login - Star-Rey</title>
   <link rel="stylesheet" href="css/style.css" />
   <script type="module" src="js/login.js"></script>
-
 </head>
 <body>
+  <div id="authLoader">
+    <p>Carregando...</p>
+  </div>
+
   <div class="login-container">
-    <!-- FORMULÁRIO -->
     <div class="formulario-login">
       <h2>🌟 Bem-vinda de volta à Star-Rey 🌟</h2>
       <form id="loginForm">
-        <input type="email" id="email" placeholder="E-mail" required />
-        <input type="password" id="password" placeholder="Senha" required />
+        <input type="email" id="email" placeholder="E-mail" required autocomplete="username"/>
+        <input type="password" id="password" placeholder="Senha" required autocomplete="current-password"/>
         <button type="submit">Entrar</button>
       </form>
       <p>Não tem uma conta ainda? <a href="cadastro.html">Cadastre-se</a></p>
     </div>
 
-    <!-- IMAGEM À DIREITA -->
     <div class="imagem-login">
-      <img src="img/garconete-vintage.png " alt="Login retrô">
+      <img src="img/garconete-vintage.png" alt="Login retrô">
     </div>
   </div>
 </body>

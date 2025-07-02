@@ -1,137 +1,127 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const usuarioLogado = JSON.parse(localStorage.getItem("usuarioLogado"));
-  if (!usuarioLogado) {
-    alert("Você precisa estar logado.");
-    window.location.href = "login.html";
-    return;
-  }
+import { db, auth } from './firebase-config.js';
+import { requireAuth, logout } from './auth-handler.js';
+import { 
+  collection, getDocs, addDoc, serverTimestamp 
+} from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
 
-  const modal = document.getElementById("modalPost");
-  const openModalBtn = document.querySelector("button[onclick='abrirModalPost()']"); // Seu botão estrela
+document.addEventListener("DOMContentLoaded", async () => {
+  const user = await requireAuth();
+  if (!user) return;
+
+  // Elementos da UI
   const feedContainer = document.getElementById("feedContainer");
-  const postText = document.getElementById("novaPostagem");
-  const postImage = document.getElementById("imagemPost");
+  const menuToggle = document.getElementById("menuToggle");
+  const sidebar = document.getElementById("sidebar");
+  const modal = document.getElementById("modalPost");
+  const openModalBtn = document.getElementById("btnAbrirModal");
+  const closeModalBtn = document.querySelector(".close");
+  const postBtn = document.getElementById("btnPostar");
+  const postText = document.getElementById("postText");
+  const postImage = document.getElementById("postImage");
 
-  // Abrir e fechar modal
-  openModalBtn.addEventListener("click", abrirModalPost);
+  // Configura menu lateral
+  setupSidebar(user);
 
-  function abrirModalPost() {
-    modal.classList.toggle("hidden");
-  }
-
-  // Função de criar post
-  document.querySelector("#modalPost button").addEventListener("click", () => {
-    const texto = postText.value.trim();
-    if (!texto) {
-      alert("Escreva algo antes de postar.");
-      return;
-    }
-
-    const post = {
-      nome: usuarioLogado.nome,
-      email: usuarioLogado.email,
-      avatar: usuarioLogado.avatar || "img/avatar-default.png",
-      texto,
-      data: new Date().toLocaleString(),
-      midias: null,
-      curtidas: 0,
-      comentarios: [],
-    };
-
-    const arquivo = postImage.files[0];
-    if (arquivo) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        post.midias = e.target.result;
-        salvarPost(post);
-      };
-      reader.readAsDataURL(arquivo);  // Safe
-    } else {
-      salvarPost(post);
-    }
+  // Event listeners
+  menuToggle.addEventListener("click", () => {
+    sidebar.classList.toggle("hidden");
   });
 
-  function salvarPost(post) {
-    let posts = JSON.parse(localStorage.getItem("posts")) || [];
-    posts.unshift(post);
-    localStorage.setItem("posts", JSON.stringify(posts));
-    renderizarPosts();
+  openModalBtn.addEventListener("click", () => {
+    modal.classList.remove("hidden");
+  });
+
+  closeModalBtn.addEventListener("click", () => {
     modal.classList.add("hidden");
-    postText.value = "";
-    postImage.value = "";
+  });
+
+  postBtn.addEventListener("click", async () => {
+    await createPost(user);
+  });
+
+  // Carrega posts
+  loadPosts();
+
+  // Funções
+  function setupSidebar(user) {
+    sidebar.innerHTML = `
+      <ul>
+        <li><a href="profile.html">👤 ${user.nome}</a></li>
+        <li><a href="editar-perfil.html">✏️ Editar Perfil</a></li>
+        <li><a href="#" id="logoutBtn">🚪 Sair</a></li>
+      </ul>
+    `;
+    
+    document.getElementById("logoutBtn").addEventListener("click", logout);
   }
 
-  function renderizarPosts() {
-    const posts = JSON.parse(localStorage.getItem("posts")) || [];
-    feedContainer.innerHTML = "";
-
-    posts.forEach((post, index) => {
-      const postEl = document.createElement("div");
-      postEl.classList.add("post");
-
-      postEl.innerHTML = `
-        <div class="post-header">
-          <img src="${post.avatar}" class="avatar-post" alt="Avatar">
-          <div>
-            <strong>${post.nome}</strong>
-            <p class="data">${post.data}</p>
-          </div>
-        </div>
-        <p>${post.texto}</p>
-        ${post.midias ? `<img src="${post.midias}" class="midia-post">` : ""}
-        <div class="post-actions">
-          <button data-action="curtir" data-index="${index}">❤️ Curtir (${post.curtidas})</button>
-          <button data-action="comentar" data-index="${index}">💬 Comentar</button>
-          <button data-action="republicar" data-index="${index}">🔁 Republicar</button>
-        </div>
-      `;
-      feedContainer.appendChild(postEl);
+  async function loadPosts() {
+    const querySnapshot = await getDocs(collection(db, "posts"));
+    feedContainer.innerHTML = '';
+    
+    querySnapshot.forEach((doc) => {
+      const post = doc.data();
+      const postElement = createPostElement(post);
+      feedContainer.appendChild(postElement);
     });
   }
 
-  // Delegação de eventos
-  feedContainer.addEventListener("click", (e) => {
-    const btn = e.target.closest("button[data-action]");
-    if (!btn) return;
-
-    const action = btn.dataset.action;
-    const index = parseInt(btn.dataset.index);
-    if (action === "curtir") curtirPost(index);
-    else if (action === "comentar") comentarPost(index);
-    else if (action === "republicar") republicarPost(index);
-  });
-
-  renderizarPosts();
-
-  function curtirPost(index) {
-    const posts = JSON.parse(localStorage.getItem("posts")) || [];
-    posts[index].curtidas++;
-    localStorage.setItem("posts", JSON.stringify(posts));
-    renderizarPosts();
+  function createPostElement(post) {
+    const postEl = document.createElement("div");
+    postEl.className = "post";
+    
+    postEl.innerHTML = `
+      <div class="post-header">
+        <img src="${post.avatar}" class="avatar-post">
+        <div>
+          <strong>${post.nome}</strong>
+          <p class="post-date">${new Date(post.createdAt?.toDate()).toLocaleString()}</p>
+        </div>
+      </div>
+      <p class="post-content">${post.texto}</p>
+      ${post.imagem ? `<img src="${post.imagem}" class="post-image">` : ''}
+      <div class="post-actions">
+        <button class="like-btn">❤️ Curtir</button>
+        <button class="comment-btn">💬 Comentar</button>
+      </div>
+    `;
+    
+    return postEl;
   }
 
-  function comentarPost(index) {
-    const comentario = prompt("Escreva seu comentário:");
-    if (comentario) {
-      const posts = JSON.parse(localStorage.getItem("posts")) || [];
-      posts[index].comentarios.push({ nome: usuarioLogado.nome, texto: comentario });
-      localStorage.setItem("posts", JSON.stringify(posts));
-      alert("Comentário adicionado!");
+  async function createPost(user) {
+    const texto = postText.value.trim();
+    if (!texto && !postImage.files[0]) {
+      alert("Adicione texto ou uma imagem");
+      return;
     }
-  }
 
-  function republicarPost(index) {
-    const posts = JSON.parse(localStorage.getItem("posts")) || [];
-    const original = posts[index];
-    const repost = {
-      ...original,
-      nome: usuarioLogado.nome,
-      email: usuarioLogado.email,
-      avatar: usuarioLogado.avatar || "img/avatar-default.png",
-      data: `Republicado em ${new Date().toLocaleString()}`
-    };
-    posts.unshift(repost);
-    localStorage.setItem("posts", JSON.stringify(posts));
-    renderizarPosts();
+    let imageUrl = '';
+    if (postImage.files[0]) {
+      // Aqui você implementaria o upload para Firebase Storage
+      // Por enquanto usamos apenas o nome do arquivo como exemplo
+      imageUrl = `img/${postImage.files[0].name}`;
+    }
+
+    try {
+      await addDoc(collection(db, "posts"), {
+        userId: user.uid,
+        nome: user.nome,
+        avatar: user.avatar,
+        texto,
+        imagem: imageUrl,
+        createdAt: serverTimestamp(),
+        likes: [],
+        comentarios: []
+      });
+
+      postText.value = '';
+      postImage.value = '';
+      modal.classList.add("hidden");
+      loadPosts();
+    } catch (error) {
+      console.error("Erro ao criar post:", error);
+      alert("Erro ao criar post. Tente novamente.");
+    }
   }
 });

@@ -1,11 +1,14 @@
-// Importações do Firebase
 import { auth } from './firebase-config.js';
 import { signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js';
 
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("loginForm");
+  const loginForm = document.getElementById("loginForm");
 
-  form.addEventListener("submit", async (e) => {
+  // Adiciona autocomplete para melhor UX
+  document.getElementById("email").setAttribute("autocomplete", "username");
+  document.getElementById("password").setAttribute("autocomplete", "current-password");
+
+  loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const email = document.getElementById("email").value.trim();
@@ -14,15 +17,20 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-
-      // Salva o UID no localStorage para controle de sessão
-      localStorage.setItem("usuarioUID", user.uid);
-
-      alert("Login bem-sucedido! Bem-vindo de volta ✨");
+      
+      // Redireciona após login bem-sucedido
       window.location.href = "index.html";
     } catch (error) {
       console.error("Erro ao fazer login:", error);
-      alert("E-mail ou senha incorretos. Verifique e tente novamente.");
+      let errorMessage = "Erro ao fazer login. Tente novamente.";
+      
+      if (error.code === "auth/invalid-credential") {
+        errorMessage = "E-mail ou senha incorretos.";
+      } else if (error.code === "auth/too-many-requests") {
+        errorMessage = "Muitas tentativas. Tente mais tarde.";
+      }
+      
+      alert(errorMessage);
     }
   });
 });
