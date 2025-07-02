@@ -3,12 +3,22 @@ import { signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9
 
 document.addEventListener("DOMContentLoaded", () => {
   const loginForm = document.getElementById("loginForm");
+  
+  // Adicionando autocomplete aos campos (se não estiver no HTML)
+  document.getElementById("email").setAttribute("autocomplete", "email");
+  document.getElementById("password").setAttribute("autocomplete", "current-password");
 
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
+
+    // Validação básica dos campos
+    if (!email || !password) {
+      alert("Por favor, preencha todos os campos.");
+      return;
+    }
 
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -20,15 +30,37 @@ document.addEventListener("DOMContentLoaded", () => {
         avatar: user.photoURL || "img/avatar-default.png"
       };
 
-      // Salva os dados no localStorage
-      localStorage.setItem("usuarioLogado", JSON.stringify(usuarioLogado));
-      localStorage.setItem("usuarioUID", user.uid); // UID para identificar o usuário logado
+      // Armazenamento seguro (considerar sessionStorage para dados sensíveis)
+      sessionStorage.setItem("usuarioLogado", JSON.stringify(usuarioLogado));
+      sessionStorage.setItem("usuarioUID", user.uid);
 
-      alert("✨ Login bem-sucedido! Bem-vindo de volta ✨");
-      window.location.href = "index.html";
+      // Feedback visual melhorado
+      showLoginSuccess(() => {
+        window.location.href = "index.html";
+      });
+      
     } catch (error) {
       console.error("Erro ao fazer login:", error);
-      alert("E-mail ou senha incorretos. Verifique e tente novamente.");
+      handleLoginError(error);
     }
   });
 });
+
+// Funções auxiliares para melhor organização
+function showLoginSuccess(callback) {
+  // Substitua por um modal ou feedback visual mais elegante
+  alert("✨ Login bem-sucedido! Bem-vindo de volta ✨");
+  if (callback) callback();
+}
+
+function handleLoginError(error) {
+  let errorMessage = "Ocorreu um erro ao fazer login. Tente novamente.";
+  
+  if (error.code === "auth/wrong-password" || error.code === "auth/user-not-found") {
+    errorMessage = "E-mail ou senha incorretos. Verifique e tente novamente.";
+  } else if (error.code === "auth/too-many-requests") {
+    errorMessage = "Muitas tentativas falhas. Tente novamente mais tarde ou redefina sua senha.";
+  }
+  
+  alert(errorMessage);
+}
