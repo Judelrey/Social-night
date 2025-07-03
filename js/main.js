@@ -46,6 +46,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   function setupSidebar(user) {
     sidebar.innerHTML = `
       <ul>
+        <li><a href="index.html">🏠 Início</a></li>
+        <li><a href="perfil.html">👤 Perfil</a></li>
+        <li><a href="mensagens.html">💌 Mensagens</a></li>
+        <li><a href="configuracoes.html">⚙️ Configurações</a></li>
         <li><a href="profile.html">👤 ${user.nome}</a></li>
         <li><a href="editar-perfil.html">✏️ Editar Perfil</a></li>
         <li><a href="#" id="logoutBtn">🚪 Sair</a></li>
