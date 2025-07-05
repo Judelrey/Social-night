@@ -10,18 +10,26 @@
   <div class="cadastro-container">
     <div class="formulario-box">
       <h2>✨ Crie sua conta retrô ✨</h2>
-      <form id="cadastroForm">
+      <form id="cadastroForm" enctype="multipart/form-data">
         <div class="form-group">
           <label for="username">Nome de usuário</label>
-          <input type="text" id="username" required>
+          <input type="text" id="username" name="username" required />
         </div>
         <div class="form-group">
           <label for="email">E-mail</label>
-          <input type="email" id="email" required>
+          <input type="email" id="email" name="email" required />
         </div>
         <div class="form-group">
           <label for="password">Senha</label>
-          <input type="password" id="password" required>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirmar Senha</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" required />
+        </div>
+        <div class="form-group">
+          <label for="avatar">Avatar (opcional)</label>
+          <input type="file" id="avatar" name="avatar" accept="image/*" />
         </div>
         <button type="submit" class="btn">Cadastrar</button>
       </form>
@@ -32,5 +40,46 @@
       <img src="img/garconete-vintage.png" alt="Garçonete Vintage" />
     </div>
   </div>
+
+  <script>
+    document.getElementById("cadastroForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const username = e.target.username.value.trim();
+      const email = e.target.email.value.trim();
+      const password = e.target.password.value;
+      const confirmPassword = e.target.confirmPassword.value;
+      const avatarInput = e.target.avatar;
+
+      if (password !== confirmPassword) {
+        alert("As senhas não coincidem!");
+        return;
+      }
+
+      const userData = {
+        username,
+        email,
+        password,
+        avatar: null,
+      };
+
+      if (avatarInput.files.length > 0) {
+        const reader = new FileReader();
+        reader.onload = function () {
+          userData.avatar = reader.result;
+          salvarUsuario(userData);
+        };
+        reader.readAsDataURL(avatarInput.files[0]);
+      } else {
+        salvarUsuario(userData);
+      }
+
+      function salvarUsuario(data) {
+        localStorage.setItem("user_" + email, JSON.stringify(data));
+        alert("Cadastro realizado com sucesso!");
+        window.location.href = "login.html";
+      }
+    });
+  </script>
 </body>
 </html>
