@@ -53,9 +53,9 @@ input, textarea {
 
 /* BOTÕES */
 button, .btn {
-  background-color: #ec4899;
+  background-color: #ab4892;
   border: none;
-  color: #ffffff;
+  color:#1b0f6b;
   padding: 12px 20px;
   font-size: 1rem;
   border-radius: 8px;
@@ -88,7 +88,7 @@ button:hover, .btn:hover {
 
 /* HEADER */
 .topbar {
-  background-color: #1e3a8a;
+  background-color: #ab4892;
   padding: 15px;
   display: flex;
   justify-content: space-between;
@@ -96,7 +96,7 @@ button:hover, .btn:hover {
   position: sticky;
   top: 0;
   z-index: 100;
-  color: #ffffff;
+  color: #20355c;
 }
 
 /* SIDEBAR */
