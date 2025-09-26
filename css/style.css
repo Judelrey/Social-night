@@ -8,8 +8,8 @@
 /* FONTE E CORES */
 body {
   font-family: 'Georgia', serif;
-  background: linear-gradient(145deg, #fffaf0, #fce4ec, #f3e5f5);
-  color: #3e2723;
+  background: #ffffff;
+  color: #000000;
   min-height: 100vh;
 }
 
@@ -45,7 +45,7 @@ form {
 input, textarea {
   padding: 12px;
   font-size: 1rem;
-  border: 2px solid #ce93d8;
+  border: 2px solid #ec4899;
   border-radius: 8px;
   width: 100%;
   font-family: 'Georgia', serif;
@@ -53,9 +53,9 @@ input, textarea {
 
 /* BOTÕES */
 button, .btn {
-  background-color: #f06292;
+  background-color: #ec4899;
   border: none;
-  color: white;
+  color: #ffffff;
   padding: 12px 20px;
   font-size: 1rem;
   border-radius: 8px;
@@ -64,7 +64,7 @@ button, .btn {
 }
 
 button:hover, .btn:hover {
-  background-color: #ec407a;
+  background-color: #be185d;
   transform: translateY(-2px);
 }
 
@@ -78,7 +78,7 @@ button:hover, .btn:hover {
 }
 
 .formulario-login, .formulario-box {
-  background: rgba(255, 250, 240, 0.9);
+  background: rgba(255, 255, 255, 0.95);
   padding: 30px;
   border-radius: 15px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
@@ -88,7 +88,7 @@ button:hover, .btn:hover {
 
 /* HEADER */
 .topbar {
-  background-color: #f8bbd0;
+  background-color: #1e3a8a;
   padding: 15px;
   display: flex;
   justify-content: space-between;
@@ -96,6 +96,7 @@ button:hover, .btn:hover {
   position: sticky;
   top: 0;
   z-index: 100;
+  color: #ffffff;
 }
 
 /* SIDEBAR */
@@ -105,7 +106,7 @@ button:hover, .btn:hover {
   left: 0;
   width: 250px;
   height: 100%;
-  background: #fce4ec;
+  background: #fef2f2;
   padding: 20px;
   transform: translateX(-100%);
   transition: transform 0.3s ease;
@@ -126,7 +127,7 @@ button:hover, .btn:hover {
 }
 
 .sidebar a {
-  color: #4a148c;
+  color: #1e3a8a;
   text-decoration: none;
   font-size: 1.1rem;
 }
@@ -139,7 +140,7 @@ button:hover, .btn:hover {
 }
 
 .post {
-  background: white;
+  background: #ffffff;
   border-radius: 12px;
   padding: 20px;
   margin-bottom: 20px;
@@ -165,7 +166,7 @@ button:hover, .btn:hover {
 }
 
 .modal-content {
-  background: white;
+  background: #ffffff;
   padding: 25px;
   border-radius: 12px;
   width: 90%;
@@ -176,6 +177,7 @@ button:hover, .btn:hover {
   float: right;
   font-size: 1.5rem;
   cursor: pointer;
+  color: #000000;
 }
 
 /* RESPONSIVO */
