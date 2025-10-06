@@ -8,8 +8,8 @@
 /* FONTE E CORES */
 body {
   font-family: 'Georgia', serif;
-  background: #ffffff;
-  color: #000000;
+  background: linear-gradient(145deg, #fffaf0, #fce4ec, #f3e5f5);
+  color: #3e2723;
   min-height: 100vh;
 }
 
@@ -45,17 +45,22 @@ form {
 input, textarea {
   padding: 12px;
   font-size: 1rem;
-  border: 2px solid #ec4899;
+  border: 2px solid #ce93d8;
   border-radius: 8px;
   width: 100%;
   font-family: 'Georgia', serif;
 }
 
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
 /* BOTÕES */
 button, .btn {
-  background-color: #ab4892;
+  background-color: #f06292;
   border: none;
-  color:#1b0f6b;
+  color: white;
   padding: 12px 20px;
   font-size: 1rem;
   border-radius: 8px;
@@ -64,8 +69,24 @@ button, .btn {
 }
 
 button:hover, .btn:hover {
-  background-color: #be185d;
+  background-color: #ec407a;
   transform: translateY(-2px);
+}
+
+/* ÍCONES NO HEADER (ESTILO FACEBOOK) */
+.topbar button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 50%;
+  transition: background 0.3s;
+  margin: 0 5px;
+}
+
+.topbar button:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 /* LAYOUT LOGIN/CADASTRO */
@@ -78,7 +99,7 @@ button:hover, .btn:hover {
 }
 
 .formulario-login, .formulario-box {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 250, 240, 0.9);
   padding: 30px;
   border-radius: 15px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
@@ -86,68 +107,242 @@ button:hover, .btn:hover {
   max-width: 500px;
 }
 
-/* HEADER */
+/* HEADER (ESTILO FACEBOOK) */
 .topbar {
-  background-color: #ab4892;
-  padding: 15px;
+  background-color: #f8bbd0;
+  padding: 15px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: sticky;
   top: 0;
   z-index: 100;
-  color: #20355c;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-/* SIDEBAR */
+.top-left {
+  flex: 0 0 auto;
+}
+
+.top-center {
+  flex: 1;
+  max-width: 400px;
+  margin: 0 20px;
+}
+
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 12px 40px 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  background: white;
+  font-size: 1rem;
+  outline: none;
+}
+
+.search-container input:focus {
+  border-color: #f06292;
+  box-shadow: 0 0 0 2px rgba(240, 98, 146, 0.2);
+}
+
+.search-icon {
+  position: absolute;
+  right: 15px;
+  font-size: 1.2rem;
+  color: #666;
+  pointer-events: none;
+}
+
+.top-right {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* SIDEBAR (MELHORADA) */
 .sidebar {
   position: fixed;
   top: 0;
   left: 0;
   width: 250px;
   height: 100%;
-  background: #fef2f2;
+  background: linear-gradient(180deg, #fce4ec, #f3e5f5);
   padding: 20px;
   transform: translateX(-100%);
   transition: transform 0.3s ease;
   z-index: 90;
+  overflow-y: auto;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
 }
 
-.sidebar.hidden {
-  transform: translateX(-100%);
+.sidebar:not(.hidden) {
+  transform: translateX(0);
 }
 
-.sidebar ul {
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 89;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s;
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.sidebar-nav ul {
   list-style: none;
   margin-top: 60px;
 }
 
-.sidebar li {
+.sidebar-nav li {
   margin: 15px 0;
 }
 
-.sidebar a {
-  color: #1e3a8a;
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  color: #4a148c;
   text-decoration: none;
   font-size: 1.1rem;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background 0.3s;
 }
 
-/* FEED */
+.sidebar-nav a:hover {
+  background: rgba(240, 98, 146, 0.1);
+}
+
+.sidebar-nav a::before {
+  content: '';
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+/* ÍCONES NOS LINKS DA SIDEBAR (OPCIONAL, ADICIONE EM JS SE QUISER) */
+.sidebar-nav a[href="#perfil"]::before { content: '👤'; }
+.sidebar-nav a[href="#configuracoes"]::before { content: '⚙️'; }
+.sidebar-nav a[href="#amigos"]::before { content: '👥'; }
+.sidebar-nav a[href="#contas"]::before { content: '🏦'; }
+.sidebar-nav a[href="#suporte"]::before { content: '❓'; }
+.sidebar-nav a[href="#sair"]::before { content: '🚪'; }
+
+/* FEED (ESTILO FACEBOOK) */
 #feedContainer {
   max-width: 600px;
   margin: 20px auto;
-  padding: 15px;
+  padding: 0 15px;
+  background: #f0f2f5; /* Fundo cinza claro como Facebook */
+  min-height: calc(100vh - 100px);
+  padding-bottom: 20px;
 }
 
 .post {
-  background: #ffffff;
+  background: white;
   border-radius: 12px;
   padding: 20px;
   margin-bottom: 20px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+  border: 1px solid #e4e6ea;
 }
 
-/* MODAL */
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.user-info strong {
+  font-size: 1rem;
+  color: #1c1e21;
+}
+
+.data {
+  color: #65676b;
+  font-size: 0.9rem;
+  margin-left: 5px;
+}
+
+.post p {
+  margin-bottom: 15px;
+  line-height: 1.4;
+  color: #1c1e21;
+}
+
+.midia {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.post-actions {
+  display: flex;
+  gap: 20px;
+  border-top: 1px solid #e4e6ea;
+  padding-top: 10px;
+}
+
+.post-actions button {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.post-actions button:hover {
+  background: #f0f2f5;
+}
+
+.comments {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e4e6ea;
+}
+
+.comment-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  outline: none;
+}
+
+.comment-list p {
+  padding: 5px 0;
+  border-bottom: 1px solid #f0f2f5;
+  font-size: 0.9rem;
+}
+
+/* MODAL (MELHORADO) */
 .modal {
   position: fixed;
   top: 0;
@@ -159,38 +354,395 @@ button:hover, .btn:hover {
   justify-content: center;
   align-items: center;
   z-index: 200;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s;
 }
 
-.modal.hidden {
-  display: none;
+.modal:not(.hidden) {
+  opacity: 1;
+  visibility: visible;
 }
 
 .modal-content {
-  background: #ffffff;
+  background: white;
   padding: 25px;
   border-radius: 12px;
   width: 90%;
   max-width: 500px;
+  position: relative;
+  transform: scale(0.9);
+  transition: transform 0.3s;
+}
+
+.modal:not(.hidden) .modal-content {
+  transform: scale(1);
 }
 
 .modal-content .close {
-  float: right;
+  position: absolute;
+  top: 10px;
+  right: 15px;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #000000;
+  color: #666;
+}
+
+.modal-content .close:hover {
+  color: #000;
+}
+
+#postImage {
+  display: none;
+}
+
+#postImage + label {
+  display: inline-block;
+  padding: 10px;
+  background: #f06292;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 10px 0;
 }
 
 /* RESPONSIVO */
 @media (max-width: 768px) {
+  .topbar {
+    padding: 10px 15px;
+  }
+
+  .top-center {
+    margin: 0 10px;
+    max-width: 200px;
+  }
+
+  .search-container input {
+    font-size: 0.9rem;
+  }
+
+  .sidebar {
+    width: 80%;
+    max-width: 300px;
+  }
+
+  .sidebar-overlay.active {
+    display: block; /* Sempre mostrar overlay em mobile */
+  }
+
   .login-container, .cadastro-container {
     flex-direction: column;
   }
   
-  .sidebar {
-    width: 200px;
-  }
-  
   .modal-content {
     width: 95%;
+    padding: 20px;
+  }
+
+  #feedContainer {
+    margin: 10px auto;
+    padding: 0 10px;
+  }
+}
+/* ... (Mantenha todo o CSS anterior até o final do RESPONSIVO) ... */
+
+/* BADGE PARA NOTIFICAÇÕES */
+.topbar button[data-badge]:after {
+  content: attr(data-badge);
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #f06292;
+  color: white;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  padding: 2px 5px;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* MODAL DE NOTIFICAÇÕES */
+#modalNotificacoes .modal-content {
+  max-height: 80vh;
+  overflow-y: auto;
+  width: 90%;
+  max-width: 400px;
+}
+
+.notificacao-item {
+  padding: 15px;
+  border-bottom: 1px solid #e4e6ea;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.notificacao-item:last-child {
+  border-bottom: none;
+}
+
+.notificacao-icone {
+  font-size: 1.5rem;
+}
+
+/* MODAL DE MENSAGENS */
+#modalMensagens .modal-content {
+  max-width: 500px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#listaUsuarios {
+  flex: 1;
+  overflow-y: auto;
+  border-bottom: 1px solid #e4e6ea;
+}
+
+.usuario-item {
+  padding: 15px;
+  border-bottom: 1px solid #f0f2f5;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.3s;
+}
+
+.usuario-item:hover {
+  background: #f0f2f5;
+}
+
+#chatContainer {
+  display: none;
+  flex-direction: column;
+  height: 100%;
+}
+
+#historicoChat {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  background: #f0f2f5;
+}
+
+.mensagem {
+  margin: 5px 0;
+  padding: 8px;
+  border-radius: 18px;
+  max-width: 80%;
+}
+
+.mensagem.enviada {
+  background: #f06292;
+  color: white;
+  margin-left: auto;
+  text-align: right;
+}
+
+.mensagem.recebida {
+  background: white;
+  border: 1px solid #ddd;
+}
+
+#inputMensagem {
+  display: flex;
+  padding: 10px;
+  gap: 10px;
+  border-top: 1px solid #e4e6ea;
+}
+
+#inputMensagem input {
+  flex: 1;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 10px;
+}
+
+#btnEnviarMsg {
+  background: #f06292;
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+/* MODAL DE PERFIL, CONFIGURAÇÕES, AMIGOS, CONTAS, SUPORTE */
+#modalPerfil, #modalConfig, #modalAmigos, #modalContas, #modalSuporte {
+  /* Mesmo estilo do modalPost, mas customizações específicas */
+}
+
+#modalPerfil .modal-content img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: block;
+  margin: 0 auto 20px;
+}
+
+.config-opcao {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #e4e6ea;
+}
+
+.toggle {
+  width: 50px;
+  height: 25px;
+  background: #ddd;
+  border-radius: 25px;
+  position: relative;
+  cursor: pointer;
+}
+
+.toggle.active {
+  background: #f06292;
+}
+
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 21px;
+  height: 21px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+.toggle.active::after {
+  transform: translateX(25px);
+}
+
+#listaAmigos, #listaContas {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.amigo-item, .conta-item {
+  padding: 10px;
+  border-bottom: 1px solid #f0f2f5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#formSuporte textarea {
+  height: 100px;
+}
+
+/* PICKER DE EMOJIS NO MODAL DE POST */
+#emojiPicker {
+  display: none;
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  max-width: 300px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.emoji {
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin: 5px;
+  display: inline-block;
+}
+
+#btnEmoji {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* POST COM MÍDIA (IMAGEM, VÍDEO, ÁUDIO, YOUTUBE) */
+.midia {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 15px 0;
+}
+
+.midia img, .midia video {
+  width: 100%;
+  height: auto;
+}
+
+.midia audio {
+  width: 100%;
+  margin: 10px 0;
+}
+
+.midia iframe {
+  width: 100%;
+  height: 300px;
+  border: none;
+  border-radius: 8px;
+}
+
+/* POST PERMANENTE (BOAS-VINDAS) */
+.post.permanente {
+  border: 2px solid #f06292;
+  background: linear-gradient(145deg, white, #fce4ec);
+}
+
+.post.permanente .user-info strong {
+  color: #f06292;
+  font-style: italic;
+}
+
+/* INPUT PARA MÚSICA NO MODAL */
+#postMusica {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+#previewMusica {
+  margin-top: 10px;
+  display: none;
+}
+
+/* PREVIEW DE UPLOAD */
+#previewMidia {
+  max-width: 100%;
+  max-height: 200px;
+  margin: 10px 0;
+  border-radius: 8px;
+  display: none;
+}
+
+/* RESPONSIVO ADICIONAL */
+@media (max-width: 768px) {
+  #modalMensagens .modal-content, #modalNotificacoes .modal-content {
+    width: 95%;
+    max-height: 90vh;
+  }
+
+  .midia iframe {
+    height: 200px;
+  }
+
+  #emojiPicker {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: none;
+    border-radius: 0 0 8px 8px;
   }
 }
