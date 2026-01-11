@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Star-Rey Feed: Uma plataforma social para compartilhar pensamentos, imagens e vídeos com seus amigos." />
+  <meta name="keywords" content="rede social, feed, posts, compartilhamento" />
+  <meta name="author" content="Star-Rey" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <title>Star-Rey Feed</title>
   <link rel="stylesheet" href="css/style.css" />
   <script type="module" src="js/main.js"></script>
@@ -13,43 +17,68 @@
   </div>
 
   <!-- MENU LATERAL -->
-  <aside id="sidebar" class="sidebar hidden">
+  <aside id="sidebar" class="sidebar hidden" role="complementary" aria-label="Menu lateral">
     <!-- Será preenchido dinamicamente -->
+    <div id="userProfile" class="user-profile">
+      <!-- Perfil do usuário pode ser adicionado aqui dinamicamente -->
+    </div>
   </aside>
 
   <!-- CABEÇALHO -->
-  <header class="topbar">
+  <header class="topbar" role="banner">
     <div class="top-left">
-      <button id="menuToggle">☰</button>
+      <button id="menuToggle" aria-label="Abrir menu lateral">☰</button>
+    </div>
+  
+    <div class="top-center">
+      <input type="text" id="searchInput" placeholder="Buscar posts ou usuários..." aria-label="Campo de busca" />
+      <button id="btnBuscar" aria-label="Buscar">🔍</button>
     </div>
   
     <div class="top-right">
-      <button id="btnAbrirModal" title="Criar Post">⭐</button>
-      <button id="btnNotificacoes" title="Notificações">🔔</button>
-      <button id="btnMensagens" title="Mensagens">💬</button>
-      <button id="btnAtualizar" title="Atualizar Feed">♻️</button>
+      <button id="btnAbrirModal" title="Criar Post" aria-label="Criar novo post">⭐</button>
+      <button id="btnNotificacoes" title="Notificações" aria-label="Ver notificações">🔔</button>
+      <button id="btnMensagens" title="Mensagens" aria-label="Ver mensagens">💬</button>
+      <button id="btnAtualizar" title="Atualizar Feed" aria-label="Atualizar feed">♻️</button>
     </div>
   </header>
 
   <!-- CONTAINER PRINCIPAL -->
-  <main>
-    <section id="feedContainer">
+  <main role="main">
+    <div id="feedLoader" class="loader hidden">
+      <p>Carregando posts...</p>
+    </div>
+    <section id="feedContainer" aria-label="Feed de posts">
       <!-- Posts serão renderizados aqui -->
     </section>
   </main>
 
   <!-- MODAL DE POSTAGEM -->
-  <div id="modalPost" class="modal hidden"> 
+  <div id="modalPost" class="modal hidden" role="dialog" aria-labelledby="modalTitle" aria-modal="true"> 
     <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>Criar Post</h2>
-      <textarea id="postText" placeholder="O que você está pensando?"></textarea>
-      <input type="file" id="postImage" accept="image/*,video/*" />
-      <button id="btnPostar">Postar</button>
+      <span class="close" aria-label="Fechar modal">&times;</span>
+      <h2 id="modalTitle">Criar Post</h2>
+      <textarea id="postText" placeholder="O que você está pensando?" aria-label="Texto do post"></textarea>
+      <input type="file" id="postImage" accept="image/*,video/*" aria-label="Selecionar imagem ou vídeo" />
+      <div id="imagePreview" class="preview hidden">
+        <!-- Preview da imagem/vídeo será mostrado aqui -->
+      </div>
+      <input type="text" id="hashtags" placeholder="Adicione hashtags (ex: #starrey #feed)" aria-label="Hashtags" />
+      <button id="btnPostar" aria-label="Publicar post">Postar</button>
     </div>
   </div>
 
   <!-- NOTIFICAÇÕES -->
-  <div id="notificacoes"></div>
+  <div id="notificacoes" aria-live="polite"></div>
+
+  <!-- RODAPÉ -->
+  <footer class="footer" role="contentinfo">
+    <p>&copy; 2023 Star-Rey Feed. Todos os direitos reservados.</p>
+    <nav>
+      <a href="#privacidade" aria-label="Política de Privacidade">Privacidade</a> |
+      <a href="#termos" aria-label="Termos de Uso">Termos</a> |
+      <a href="#contato" aria-label="Contato">Contato</a>
+    </nav>
+  </footer>
 </body>
 </html>
